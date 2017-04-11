@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -v
+javac *.java
+
+
+pkill rmiregistry
+\rm -rf tProductor tProductargent tProductbronze tClient 
+mkdir tProductor
+mkdir tProductargent
+mkdir tProductbronze
+
+
+mkdir tClient
+
+for i in Client ProductorImpl ProductargentImpl ProductbronzeImpl Product
+do  cp $i.class tClient ; done
+
+for i in Productor ProductorImpl Product 
+do  cp $i.class tProductor ; done
+
+for i in Productargent ProductargentImpl Product 
+do  cp $i.class tProductargent ; done
+
+for i in Productbronze ProductbronzeImpl Product 
+do  cp $i.class tProductbronze ; done
+
+cd tProductor
+rmiregistry 6666 &
+cd ..
+
+\rm *.class

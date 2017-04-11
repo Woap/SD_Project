@@ -16,14 +16,17 @@ public class Client
     }
     try
     {
-      Product c = (Product) Naming.lookup( "rmi://localhost:6666/Productor" ) ;
-      Product s = (Product) Naming.lookup( "rmi://localhost:6666/Productargent" ) ;
+      Product o = (Product) Naming.lookup( "rmi://localhost:6666/Productor" ) ;
+      Product a = (Product) Naming.lookup( "rmi://localhost:6666/Productargent" ) ;
+      Product b = (Product) Naming.lookup( "rmi://localhost:6666/Productbronze" ) ;
+      
       System.out.println("Ressource client : OR -> "+ or +" ARGENT -> "+ argent +" BRONZE -> "+ bronze );
-      or += c.getOr(10);
-      System.out.println("Ressource client après : OR -> "+ or +" ARGENT -> "+ argent +" BRONZE -> "+bronze );
+      System.out.println("Je recolte 10 or "); or += o.getOr(10);
+      
+System.out.println("Ressource client après : OR -> "+ or +" ARGENT -> "+ argent +" BRONZE -> "+bronze );
  
-      argent += s.getArgent(25);
-      or += s.getOr(10);
+      System.out.println("Je recolte 25 argent "); argent += a.getArgent(25);
+      System.out.println("Je recolte 10 or "); or += o.getOr(10);
  
       System.out.println("Ressource client après + : OR -> "+or +" ARGENT -> "+argent +" BRONZE -> "+bronze );
       
