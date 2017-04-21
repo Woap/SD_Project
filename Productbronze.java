@@ -12,7 +12,9 @@ public class Productbronze
     }
     try
     {
-      ProductbronzeImpl objLocal = new ProductbronzeImpl () ;
+      ProductImpl objLocal = new ProductImpl (false,false,true,0,0,500) ;
+      Product_thread t = new Product_thread(); 
+      t.setOptions(objLocal,false,false,true);
       Naming.rebind( "rmi://localhost:6666/Productbronze" ,objLocal) ;
       System.out.println("Productbronze pret") ;
     }

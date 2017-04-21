@@ -12,7 +12,9 @@ public class Productargent
     }
     try
     {
-      ProductargentImpl objLocal = new ProductargentImpl () ;
+      ProductImpl objLocal = new ProductImpl (false,true,false,0,200,0) ;
+      Product_thread t = new Product_thread(); 
+      t.setOptions(objLocal,false,true,false);
       Naming.rebind( "rmi://localhost:6666/Productargent" ,objLocal) ;
       System.out.println("Productargent pret") ;
     }

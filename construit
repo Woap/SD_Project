@@ -13,16 +13,16 @@ mkdir tProductbronze
 
 mkdir tClient
 
-for i in Client ProductorImpl ProductargentImpl ProductbronzeImpl Product
+for i in Client ClientImpl ProductImpl Product_thread Product Client_thread
 do  cp $i.class tClient ; done
 
-for i in Productor ProductorImpl Product 
+for i in Productor ProductImpl Product Product_thread
 do  cp $i.class tProductor ; done
 
-for i in Productargent ProductargentImpl Product 
+for i in Productargent ProductImpl Product Product_thread
 do  cp $i.class tProductargent ; done
 
-for i in Productbronze ProductbronzeImpl Product 
+for i in Productbronze ProductImpl Product  Product_thread
 do  cp $i.class tProductbronze ; done
 
 cd tProductor

@@ -12,7 +12,9 @@ public class Productor
     }
     try
     {
-      ProductorImpl objLocal = new ProductorImpl () ;
+      ProductImpl objLocal = new ProductImpl (true,false,false,100,0,0) ;
+      Product_thread t = new Product_thread(); 
+      t.setOptions(objLocal,true,false,false);
       Naming.rebind( "rmi://localhost:6666/Productor" ,objLocal) ;
       System.out.println("Productor pret") ;
     }
