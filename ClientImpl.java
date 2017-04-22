@@ -1,3 +1,5 @@
+
+
 import java.rmi.server.UnicastRemoteObject ;
 import java.rmi.RemoteException ;
 
@@ -11,7 +13,8 @@ public class ClientImpl
 	public ClientImpl ()
     throws RemoteException
   {
-    System.out.println("Ressource disponible : OR -> "+ this.or +" ARGENT -> "+ this.argent +" BRONZE -> "+ this.bronze );
+  	System.out.println("Lancement d'un client");
+    System.out.println("Ressource acquise : OR -> "+ this.or +" ARGENT -> "+ this.argent +" BRONZE -> "+ this.bronze );
   } ;
   
 }

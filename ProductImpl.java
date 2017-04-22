@@ -1,3 +1,5 @@
+
+
 import java.rmi.server.UnicastRemoteObject ;
 import java.rmi.RemoteException ;
 
@@ -42,13 +44,11 @@ public class ProductImpl
 	{
 		this.or -=or;
 		System.out.println("Livraison de la commande de " + or + " or " );
-                System.out.println("Ressource disponible : OR -> "+ this.or +" ARGENT -> "+ this.argent +" BRONZE -> "+ this.bronze );
 		return or;
 	}
         else
 	{
 		System.out.println("Ressource insuffisante " );
-		System.out.println("Ressource disponible : OR -> "+ this.or +" ARGENT -> "+ this.argent +" BRONZE -> "+ this.bronze );
 		return 0;
 	}
         
@@ -57,16 +57,15 @@ public class ProductImpl
 
   public int getArgent(int argent)
   {	
+  System.out.println("Un client demande " + argent + " argent " );
 	if ( this.argent >= argent  && argent <= 25)
         {
 		this.argent -=argent;
-		System.out.println("Ressource disponible : OR -> "+ this.or +" ARGENT -> "+ this.argent +" BRONZE -> "+ this.bronze );
 		return argent;
 	}
         else
 	{
 	  System.out.println("Ressource insuffisante " );
-		System.out.println("Ressource disponible : OR -> "+ this.or +" ARGENT -> "+ this.argent +" BRONZE -> "+ this.bronze );
 		return 0;
         }
         
@@ -74,18 +73,17 @@ public class ProductImpl
  
 
   public int getBronze(int bronze)
-   {	
+   {
+   System.out.println("Un client demande " + bronze + " bronze " );	
 	if ( this.bronze >= bronze  && bronze <= 50)
 	{
 	this.bronze -=bronze;
-		System.out.println("Ressource disponible : OR -> "+ this.or +" ARGENT -> "+ this.argent +" BRONZE -> "+ this.bronze );
 	return bronze;
 	
 	}
    else
   {
     System.out.println("Ressource insuffisante " );
-  	System.out.println("Ressource disponible : OR -> "+ this.or +" ARGENT -> "+ this.argent +" BRONZE -> "+ this.bronze );
 		return 0;
 	}
    

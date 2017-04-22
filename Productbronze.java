@@ -1,3 +1,5 @@
+
+
 import java.net.* ;
 import java.rmi.* ;
 
@@ -12,7 +14,7 @@ public class Productbronze
     }
     try
     {
-      ProductImpl objLocal = new ProductImpl (false,false,true,0,0,500) ;
+      ProductImpl objLocal = new ProductImpl (false,false,true,0,0,30) ;
       Product_thread t = new Product_thread(); 
       t.setOptions(objLocal,false,false,true);
       Naming.rebind( "rmi://localhost:6666/Productbronze" ,objLocal) ;

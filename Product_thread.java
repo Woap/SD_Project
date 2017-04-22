@@ -1,5 +1,4 @@
 
-
 import java.rmi.* ; 
 import java.net.MalformedURLException ; 
 
@@ -34,21 +33,21 @@ class Product_thread extends Thread {
     {
     	if (or)
     	{
-      	t.or+=10;
+      	t.or+=(t.or/2)+1;
       	System.out.println("Production de 10 or ");
       	System.out.println("Ressource disponible : OR -> "+ t.or +" ARGENT -> "+ t.argent +" BRONZE -> "+ t.bronze );
       	sleep(1000);
       }
       else if ( argent ) 
       {
-      	t.argent+=10;
+      	t.argent+=(t.argent/2)+1;
       	System.out.println("Production de 10 argent ");
       	System.out.println("Ressource disponible : OR -> "+ t.or +" ARGENT -> "+ t.argent +" BRONZE -> "+ t.bronze );
       	sleep(1000);
       }
       else if ( bronze ) 
       {
-      	t.bronze+=10;
+      	t.bronze+=(t.bronze/2)+1;
       	System.out.println("Production de 10 bronze ");
       	System.out.println("Ressource disponible : OR -> "+ t.or +" ARGENT -> "+ t.argent +" BRONZE -> "+ t.bronze );
       	sleep(1000);

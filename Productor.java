@@ -1,3 +1,4 @@
+
 import java.net.* ;
 import java.rmi.* ;
 
@@ -12,7 +13,7 @@ public class Productor
     }
     try
     {
-      ProductImpl objLocal = new ProductImpl (true,false,false,100,0,0) ;
+      ProductImpl objLocal = new ProductImpl (true,false,false,5,0,0) ;
       Product_thread t = new Product_thread(); 
       t.setOptions(objLocal,true,false,false);
       Naming.rebind( "rmi://localhost:6666/Productor" ,objLocal) ;
