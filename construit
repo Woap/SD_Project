@@ -20,7 +20,7 @@ mkdir tProductbronze
 
 mkdir tClient
 
-for i in Client ClientImpl ProductImpl Product_thread Product Client_thread 
+for i in Client ClientImpl ProductImpl Product_thread Product Client_thread Personnalite
 do  cp $i.class tClient ; done
 
 for i in Productor ProductImpl Product Product_thread
@@ -51,13 +51,9 @@ cd ..
 sleep 1
 
 cd tClient
-xterm -hold -e java Client localhost 6666 0 &
+xterm -hold -e java Client localhost 6666 CUPIDE &
 for i in `seq 1 $1 `;
 do
-	xterm -hold -e java Client localhost 6666 1 &
+	xterm -hold -e java Client localhost 6666 RUSE &
 done
 cd ..
-
-
-
-

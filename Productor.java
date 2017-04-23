@@ -13,10 +13,12 @@ public class Productor
     }
     try
     {
-      ProductImpl objLocal = new ProductImpl (true,false,false,5,0,0) ;
-      Product_thread t = new Product_thread(); 
-      t.setOptions(objLocal,true,false,false);
+      ProductImpl objLocal = new ProductImpl (true,false,false,2,0,0) ;
       Naming.rebind( "rmi://localhost:6666/Productor" ,objLocal) ;
+      Product_thread t = new Product_thread();
+      t.setOptions(objLocal,true,false,false);
+      t.lancement();
+
       System.out.println("Productor pret") ;
     }
     catch (RemoteException re) { System.out.println(re) ; }
