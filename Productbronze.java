@@ -14,11 +14,10 @@ public class Productbronze
     }
     try
     {
-      ProductImpl objLocal = new ProductImpl (false,false,true,0,0,2) ;
-      Naming.rebind( "rmi://localhost:6666/Productbronze" ,objLocal) ;
       Product_thread t = new Product_thread();
+      ProductImpl objLocal = new ProductImpl (t,false,false,true,0,0,2) ;
+      Naming.rebind( "rmi://localhost:6666/Productbronze" ,objLocal) ;
       t.setOptions(objLocal,false,false,true);
-      t.lancement();
       System.out.println("Productbronze pret") ;
     }
     catch (RemoteException re) { System.out.println(re) ; }

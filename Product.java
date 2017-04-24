@@ -1,13 +1,10 @@
 
 
-import java.rmi.Remote ; 
-import java.rmi.RemoteException ; 
+import java.rmi.Remote ;
+import java.rmi.RemoteException ;
 
 public interface Product extends Remote
 {
- 
-  public String messageDistant()
-    throws RemoteException ;
 
   public int getOr(int or)
     throws RemoteException ;
@@ -16,5 +13,11 @@ public interface Product extends Remote
     throws RemoteException ;
 
   public int getBronze(int bronze)
+    throws RemoteException ;
+
+  public void lancement()
+    throws RemoteException ;
+
+  public void stopproduction()
     throws RemoteException ;
 }

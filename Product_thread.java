@@ -8,6 +8,9 @@ class Product_thread extends Thread {
 	protected boolean or = false;
 	protected boolean argent = false;
 	protected boolean bronze = false;
+	protected Coordinateur coord;
+
+	protected boolean stop = false;
 
 	public void Product_thread(){
   }
@@ -18,23 +21,29 @@ class Product_thread extends Thread {
 	this.or = or; // Production d'or ?
   this.argent = argent; // Production d'argent ?
   this.bronze = bronze; // Production de bronze ?
-
-
-
   }
 
 	public void lancement()
 	{
+		try{this.coord = (Coordinateur) Naming.lookup( "rmi://localhost:6666/Coordinateur" ) ;}
+		catch (NotBoundException re) { System.out.println(re) ; }
+		catch (RemoteException re) { System.out.println(re) ; }
+		catch (MalformedURLException e) { System.out.println(e) ; }
 		this.start();
 		System.out.println("Lancement de la production" );
 	}
 
+	public void stopproduction()
+	{
+		this.stop = true;
+	}
+
 
 	public void run(){
-    while(true)
+    while(!this.stop)
     {
       try
-    {
+    	{
     	if (or && t.or < 10000)
     	{
       	t.or+=(t.or/2)+1;
@@ -56,9 +65,13 @@ class Product_thread extends Thread {
       	System.out.println("Ressource disponible : OR -> "+ t.or +" ARGENT -> "+ t.argent +" BRONZE -> "+ t.bronze );
       	sleep(300);
       }
+			sleep(500);
       }
     	catch (InterruptedException re) { System.out.println(re) ; }
+
     }
+
+		System.out.println("Fin de la production");
   }
 
 

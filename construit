@@ -16,12 +16,14 @@ javac *.java
 mkdir tProductor
 mkdir tProductargent
 mkdir tProductbronze
-
-
+mkdir tCoordinateur
 mkdir tClient
 
-for i in Client ClientImpl ProductImpl Product_thread Product Client_thread Personnalite
+for i in Client Clienttype ClientImpl ProductImpl Product_thread Product Client_thread Personnalite Coordinateur Coordinateurtype CoordinateurImpl
 do  cp $i.class tClient ; done
+
+for i in Coordinateur Coordinateurtype CoordinateurImpl Client Clienttype ClientImpl ProductImpl Product_thread Product Client_thread Personnalite
+do  cp $i.class tCoordinateur ; done
 
 for i in Productor ProductImpl Product Product_thread
 do  cp $i.class tProductor ; done
@@ -32,7 +34,7 @@ do  cp $i.class tProductargent ; done
 for i in Productbronze ProductImpl Product  Product_thread
 do  cp $i.class tProductbronze ; done
 
-cd tProductor
+cd tClient
 rmiregistry 6666 &
 cd ..
 
@@ -48,12 +50,20 @@ cd tProductbronze
 xterm -hold -e  java Productbronze 6666 &
 cd ..
 
+
 sleep 1
 
 cd tClient
-xterm -hold -e java Client localhost 6666 CUPIDE &
-for i in `seq 1 $1 `;
-do
-	xterm -hold -e java Client localhost 6666 RUSE &
-done
+
+xterm -hold -e java Clienttype localhost 6666 1 RUSE 2 &
+
+xterm -hold -e java Clienttype localhost 6666 2 CUPIDE 2 &
+
+cd ..
+
+
+sleep 1
+
+cd tCoordinateur
+xterm -hold -e  java Coordinateurtype 6666 2 0 0 0 &
 cd ..

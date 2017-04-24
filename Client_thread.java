@@ -1,4 +1,7 @@
 
+import java.rmi.server.UnicastRemoteObject ;
+import java.rmi.RemoteException ;
+import java.util.ArrayList;
 import java.rmi.* ;
 import java.net.MalformedURLException ;
 
@@ -6,117 +9,147 @@ import java.net.MalformedURLException ;
 
 class Client_thread extends Thread {
 
-
-
-	public ClientImpl c;
+	protected ClientImpl c;
 	protected Product or; // obj 100
 	protected Product argent; // obj 500
 	protected Product bronze; // obj 1000
-	public Personnalite p;
+	protected Personnalite p;
+	protected Coordinateur coord;
+	protected int noclient;
+	protected int nbclient;
 
-	public void Client_thread(){
-  }
+	protected ArrayList<Client> clientlist;
 
-  public void setOptions(ClientImpl c,Product o, Product a, Product b,Personnalite p)
+	public void Client_thread(){}
+
+  public void setOptions(ClientImpl c,Personnalite p,int noclient, int nbclient)
   {
 	this.c = c; // Parent
-	this.or = o; // Producteur d'or
-  this.argent = a; // Producteur d'argent
-  this.bronze = b; // Producteur de bronze
   this.p = p;
-
-
-
+	this.noclient = noclient;
+	this.nbclient = nbclient;
   }
 
 	public void lancement()
 	{
+		try {
+		this.or = (Product) Naming.lookup( "rmi://localhost:6666/Productor" ) ;
+		this.argent = (Product) Naming.lookup( "rmi://localhost:6666/Productargent" ) ;
+		this.bronze = (Product) Naming.lookup( "rmi://localhost:6666/Productbronze" ) ;
+		this.coord= (Coordinateur) Naming.lookup( "rmi://localhost:6666/Coordinateur" ) ;
+
+		this.clientlist = new ArrayList<Client>();
+
+    Client client;
+    for ( int i = 1 ; i <= this.nbclient ; i++ )
+    {
+				if ( i != noclient )
+				{
+        client = (Client) Naming.lookup( "rmi://localhost:6666/Client"+i );
+        clientlist.add(client);
+				}
+    }
+
+		}
+		catch (NotBoundException re) { System.out.println(re) ; }
+		catch (RemoteException re) { System.out.println(re) ; }
+		catch (MalformedURLException e) { System.out.println(e) ; }
+
 		this.start();
 		System.out.println("Lancement de la récolte" );
 	}
 
-
+	public Personnalite getPersonnalite()
+	{
+		return this.p;
+	}
 
 	public void run(){
 
+	try {
+	int[] r = c.getAmountRess();
+
   if ( this.p == Personnalite.CUPIDE )
   {
-  		while(c.or < 100 || c.argent < 100 || c.bronze < 100)
+  		while(r[0] < 100 || r[1] < 100 || r[2] < 100)
     	{
-      	try
-    		{
-    			if ( c.or < 100)
+
+    			if ( r[0] < 100)
     			{
-    	  		c.or += or.getOr(10);
+    	  		c.addOr(or.getOr(10));
     	  		sleep(100);
+						r = c.getAmountRess();
     	  	}
-					System.out.println("Ressource disponible : OR -> "+ c.or +" ARGENT -> "+ c.argent +" BRONZE -> "+ c.bronze );
 
-    	  	if ( c.or == 100 && c.argent < 100 )
+					//System.out.println("Ressource disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
+
+    	  	if ( r[0] == 100 && r[1] < 100 )
     	  	{
-    	  		c.argent += argent.getArgent(10);
+    	  		c.addArgent(argent.getArgent(10));
     	  		sleep(100);
+						r = c.getAmountRess();
       		}
-					System.out.println("Ressource disponible : OR -> "+ c.or +" ARGENT -> "+ c.argent +" BRONZE -> "+ c.bronze );
 
-      		if ( c.argent == 100 && c.bronze < 100 )
+
+      		if ( r[1] == 100 && r[2] < 100 )
       		{
-      			c.bronze += bronze.getBronze(10);
+      			c.addBronze(bronze.getBronze(10));
       			sleep(100);
+						r = c.getAmountRess();
       		}
-      	}
-    		catch (InterruptedException re) { System.out.println(re) ; }
-    		catch (RemoteException re) { System.out.println(re) ; }
+					System.out.println("Ressource disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
 
     	}
   	}
   	else if ( this.p == Personnalite.RUSE )
   	{
   		int recu=1;
-  		while(c.or < 100 || c.argent < 100 || c.bronze < 100)
+  		while(r[0] < 100 || r[1] < 100 || r[2] < 100)
     	{
-      	try
-    		{
-					System.out.println("Ressource disponible : OR -> "+ c.or +" ARGENT -> "+ c.argent +" BRONZE -> "+ c.bronze );
-    			while ( c.or < 100 && recu != 0)
+
+    			while ( r[0] < 100 && recu != 0)
     			{
     				recu = or.getOr(10);
-    	  		c.or += recu;
+    	  		c.addOr(recu);
     	  		sleep(100);
+						r = c.getAmountRess();
     	  	}
     	  	recu = 1;
 
-					System.out.println("Ressource disponible : OR -> "+ c.or +" ARGENT -> "+ c.argent +" BRONZE -> "+ c.bronze );
-    	  	while ( c.argent < 100 && recu != 0 )
+
+    	  	while ( r[1] < 100 && recu != 0 )
     	  	{
     	  		recu = argent.getArgent(10);
-    	  		c.argent += recu;
+    	  		c.addArgent(recu);
     	  		sleep(100);
+						r = c.getAmountRess();
       		}
       		recu = 1;
 
-					System.out.println("Ressource disponible : OR -> "+ c.or +" ARGENT -> "+ c.argent +" BRONZE -> "+ c.bronze );
-      		while  ( c.bronze < 100 && recu != 0 )
+
+      		while  ( r[2] < 100 && recu != 0 )
       		{
 						recu = bronze.getBronze(10);
-      			c.bronze += recu;
+      			c.addBronze(recu);
       			sleep(100);
+						r = c.getAmountRess();
       		}
       		recu = 1;
-      	}
-    		catch (InterruptedException re) { System.out.println(re) ; }
-    		catch (RemoteException re) { System.out.println(re) ; }
+					System.out.println("Ressource disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
 
     	}
 
   	}
 
-
-
-
+	}
+	catch (RemoteException re) { System.out.println(re) ; }
+	catch (InterruptedException re) { System.out.println(re) ; }
 
     System.out.println("Ressource disponible : OR -> "+ c.or +" ARGENT -> "+ c.argent +" BRONZE -> "+ c.bronze );
-
+		try
+		{
+		coord.fini(noclient);
+		}catch (RemoteException re) { System.out.println(re) ; }
     System.out.println("J'ai fini " );
 
   }

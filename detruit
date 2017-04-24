@@ -3,6 +3,6 @@
 set -v
 
 pkill rmiregistry
-\rm -rf tProductor tProductargent tProductbronze tClient 
+\rm -rf tProductor tProductargent tProductbronze tClient tCoordinateur
 
 \rm *.class

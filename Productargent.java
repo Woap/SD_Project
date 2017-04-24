@@ -14,11 +14,10 @@ public class Productargent
     }
     try
     {
-      ProductImpl objLocal = new ProductImpl (false,true,false,0,2,0) ;
-      Naming.rebind( "rmi://localhost:6666/Productargent" ,objLocal) ;
       Product_thread t = new Product_thread();
+      ProductImpl objLocal = new ProductImpl (t,false,true,false,0,2,0) ;
+      Naming.rebind( "rmi://localhost:6666/Productargent" ,objLocal) ;
       t.setOptions(objLocal,false,true,false);
-      t.lancement();
       System.out.println("Productargent pret") ;
     }
     catch (RemoteException re) { System.out.println(re) ; }
