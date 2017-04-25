@@ -1,5 +1,8 @@
 
 public enum Personnalite {
-  CUPIDE,
-  RUSE;	
+  INDIVIDUALISTE,
+  COOPERATIF,
+  VOLEUR,
+  PRUDENT,
+  COOPERATIFMALIN;
 }

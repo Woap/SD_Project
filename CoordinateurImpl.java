@@ -89,7 +89,7 @@ public class CoordinateurImpl
      classement++;
      tableauclassement.add(client);
 
-     if ( tableauclassement.size() == 2 )
+     if ( tableauclassement.size() == this.nbclient )
      {
        o.stopproduction();
        a.stopproduction();

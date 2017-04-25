@@ -20,7 +20,19 @@ public interface Client extends Remote
   public int[] getAmountRess()
     throws RemoteException ;
 
+  public int volOr(int value)
+    throws RemoteException ;
+
+  public int volArgent(int value)
+    throws RemoteException ;
+
+  public int volBronze(int value)
+    throws RemoteException ;
+
   public Personnalite getPersonnalite()
+    throws RemoteException ;
+
+  public Tache getTacheActuel()
     throws RemoteException ;
 
 

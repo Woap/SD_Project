@@ -39,7 +39,7 @@ public class ProductImpl
   }
 
 
-  public int getOr(int or)
+  public synchronized int getOr(int or)
   {
 	System.out.println("Un client demande " + or + " or " );
 	if ( this.or >= or  && or <= 10)
@@ -57,10 +57,10 @@ public class ProductImpl
   }
 
 
-  public int getArgent(int argent)
+  public synchronized int getArgent(int argent)
   {
   System.out.println("Un client demande " + argent + " argent " );
-	if ( this.argent >= argent  && argent <= 25)
+	if ( this.argent >= argent  && argent <= 10)
         {
 		this.argent -=argent;
 		return argent;
@@ -74,10 +74,10 @@ public class ProductImpl
   }
 
 
-  public int getBronze(int bronze)
+  public synchronized int getBronze(int bronze)
    {
    System.out.println("Un client demande " + bronze + " bronze " );
-	if ( this.bronze >= bronze  && bronze <= 50)
+	if ( this.bronze >= bronze  && bronze <= 10)
 	{
 	this.bronze -=bronze;
 	return bronze;
@@ -89,7 +89,19 @@ public class ProductImpl
 		return 0;
 	}
 
-   }
+  }
+
+  public synchronized int[] getAmountRess()
+    throws RemoteException
+  {
+    int[] intArray = new int[3];
+    intArray[0] = this.or;
+    intArray[1] = this.argent;
+    intArray[2] = this.bronze;
+    return intArray;
+
+
+  }
 
   public void stopproduction()
     throws RemoteException

@@ -27,25 +27,113 @@ public class ClientImpl
     t.lancement();
   }
 
-  public void addOr(int value)
+  public Tache getTacheActuel()
+    throws RemoteException
+  {
+    return t.getTacheActuel();
+  }
+
+  public synchronized void addOr(int value)
   throws RemoteException
   {
     this.or +=value;
   }
 
-  public void addArgent(int value)
+  public synchronized void addArgent(int value)
   throws RemoteException
   {
     this.argent +=value;
   }
 
-  public void addBronze(int value)
+  public synchronized void addBronze(int value)
   throws RemoteException
   {
     this.bronze +=value;
   }
 
-  public int[] getAmountRess()
+  public synchronized int volOr(int value)
+  throws RemoteException
+  {
+    if ( this.or != 100 && this.argent != 100 && this.bronze != 100)
+    {
+      if ( t.getTacheActuel() != Tache.OBSERVATION ) // Si pendant le vol je suis en observation
+      {
+
+      if ( this.or >= value  && value <= 10 )
+      {
+        System.out.println("Je me fait voler "+ value + " or" );
+        this.or -=value;
+        return value;
+      }
+      else
+        return 0;
+
+      }
+      else
+      {
+      System.out.println("J'étais en observation pendant le vol, pénalité pour le voleur" );
+      return -1; // Pénalité
+      }
+    }
+    else
+      return 0;
+  }
+
+  public synchronized int volArgent(int value)
+  throws RemoteException
+  {
+    if ( this.or != 100 && this.argent != 100 && this.bronze != 100)
+    {
+      if ( t.getTacheActuel() != Tache.OBSERVATION ) // Si pendant le vol je suis en observation
+      {
+
+        if ( this.argent >= value  && value <= 10)
+        {
+          System.out.println("Je me fait voler "+ value + " argent" );
+          this.argent -=value;
+          return value;
+        }
+        else
+        return 0;
+      }
+      else
+      {
+      System.out.println("J'étais en observation pendant le vol, pénalité pour le voleur" );
+      return -1; // Pénalité
+      }
+    }
+    else
+      return 0;
+  }
+
+  public synchronized int volBronze(int value)
+  throws RemoteException
+  {
+    if ( this.or != 100 && this.argent != 100 && this.bronze != 100)
+    {
+      if ( (t.getTacheActuel() != Tache.OBSERVATION) ) // Si pendant le vol je suis en observation
+      {
+      if ( this.bronze >= value && value <= 10)
+      {
+      System.out.println("Je me fait voler "+ value + " bronze" );
+      this.bronze -=value;
+      return value;
+      }
+      else
+      return 0;
+
+      }
+      else
+      {
+      System.out.println("J'étais en observation pendant le vol, pénalité pour le voleur" );
+      return -1; // Pénalité
+      }
+    }
+    else
+      return 0;
+  }
+
+  public synchronized int[] getAmountRess()
     throws RemoteException
   {
     int[] intArray = new int[3];
