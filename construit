@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ $# != 8 ]
+if [ $# != 14 ]
 then
-        echo "Usage : $0 nbclindiv nbclcoop nbclvoleur nbclprudent nbclcoopmalin nbproductor nbproductargent nbproductbronze"
+        echo "Usage : $0 nbclindiv nbclcoop nbclvoleur nbclprudent nbclcoopmalin nbproductor nbproductargent nbproductbronze ordonnancement humain epuisable observation vol fin"
 				exit -1
 fi
 
@@ -39,15 +39,15 @@ rmiregistry 6666 &
 cd ..
 
 cd tProductor
-xterm -hold -e  java Productor 6666 &
+xterm -hold -e  java Productor 6666 ${11} &
 cd ..
 
 cd tProductargent
-xterm -hold -e  java Productargent 6666 &
+xterm -hold -e  java Productargent 6666 ${11} &
 cd ..
 
 cd tProductbronze
-xterm -hold -e  java Productbronze 6666 &
+xterm -hold -e  java Productbronze 6666 ${11} &
 cd ..
 
 
@@ -58,38 +58,41 @@ cd tClient
 let "tot=$1 + $2 + $3 + $4 + $5"
 for i in $(seq 1 $1)
 do
-  xterm -hold -e java Clienttype localhost 6666 $i INDIVIDUALISTE $tot &
+  xterm -hold -e java Clienttype localhost 6666 $i INDIVIDUALISTE $tot ${12} ${13} &
 done
 
 for i in $(seq 1 $2)
 do
   let "no=$1 + $i"
-  xterm -hold -e java Clienttype localhost 6666 $no COOPERATIF $tot &
+  xterm -hold -e java Clienttype localhost 6666 $no COOPERATIF $tot ${12} ${13} &
 done
 
 for i in $(seq 1 $3)
 do
   let "no=$1 + $2 + $i"
-  xterm -hold -e java Clienttype localhost 6666 $no VOLEUR $tot &
+  xterm -hold -e java Clienttype localhost 6666 $no VOLEUR $tot ${12} ${13} &
 done
 
 for i in $(seq 1 $4)
 do
   let "no=$1 + $2 + $3 + $i"
-  xterm -hold -e java Clienttype localhost 6666 $no PRUDENT $tot &
+  xterm -hold -e java Clienttype localhost 6666 $no PRUDENT $tot ${12} ${13} &
 done
 
 for i in $(seq 1 $5)
 do
   let "no=$1 + $2 + $3 + $4 + $i"
-  xterm -hold -e java Clienttype localhost 6666 $no COOPERATIFMALIN $tot &
+  xterm -hold -e java Clienttype localhost 6666 $no COOPERATIFMALIN $tot ${12} ${13} &
 done
 
 cd ..
 
 
+
+
+
 sleep 1
 
 cd tCoordinateur
-xterm -hold -e  java Coordinateurtype 6666 $tot 0 0 0 &
+xterm -hold -e  java Coordinateurtype 6666 $tot $9 ${10} ${14} &
 cd ..

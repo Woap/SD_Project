@@ -27,6 +27,12 @@ public class ClientImpl
     t.lancement();
   }
 
+  public void stopRecolte()
+    throws RemoteException
+  {
+    t.stopRecolte();
+  }
+
   public Tache getTacheActuel()
     throws RemoteException
   {

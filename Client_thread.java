@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.rmi.* ;
 import java.net.MalformedURLException ;
 
+// ./construit 0 0 1 1 0 1 1 1 0 0 1 1 1
 
 
 class Client_thread extends Thread {
@@ -19,17 +20,24 @@ class Client_thread extends Thread {
 	protected int noclient;
 	protected int nbclient;
 
+	protected boolean observation=false;
+	protected boolean vol=false;
+
+	protected boolean stop=false;
+
 
 	protected ArrayList<Client> clientlist;
 
 	public void Client_thread(){}
 
-  public void setOptions(ClientImpl c,Personnalite p,int noclient, int nbclient)
+  public void setOptions(ClientImpl c,Personnalite p,int noclient, int nbclient,int observation, int vol)
   {
 	this.c = c; // Parent
   this.p = p;
 	this.noclient = noclient;
 	this.nbclient = nbclient;
+	if ( observation == 1 ) this.observation = true;
+	if ( vol == 1) this.vol = true;
   }
 
 	public void lancement()
@@ -71,6 +79,11 @@ class Client_thread extends Thread {
     return this.t;
   }
 
+	public void stopRecolte()
+	{
+		this.stop=true;
+	}
+
 	public void run(){
 
 	try {
@@ -79,9 +92,9 @@ class Client_thread extends Thread {
 
   if ( this.p == Personnalite.INDIVIDUALISTE )
   {
-  		while(r[0] < 100 || r[1] < 100 || r[2] < 100)
+  		while( !this.stop && (r[0] < 100 || r[1] < 100 || r[2] < 100) )
     	{
-    			if ( r[0] < 100)
+    			if (!this.stop &&  r[0] < 100)
     			{
     	  		c.addOr(or.getOr(10));
     	  		sleep(100);
@@ -90,7 +103,7 @@ class Client_thread extends Thread {
 
 					//System.out.println("Ressource disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
 
-    	  	if ( r[0] == 100 && r[1] < 100 )
+    	  	if (!this.stop && r[0] == 100 && r[1] < 100 )
     	  	{
     	  		c.addArgent(argent.getArgent(10));
     	  		sleep(100);
@@ -98,7 +111,7 @@ class Client_thread extends Thread {
       		}
 
 
-      		if ( r[1] == 100 && r[2] < 100 )
+      		if (!this.stop && r[1] == 100 && r[2] < 100 )
       		{
       			c.addBronze(bronze.getBronze(10));
       			sleep(100);
@@ -111,10 +124,10 @@ class Client_thread extends Thread {
   	else if ( this.p == Personnalite.COOPERATIF )
   	{
   		int recu=1;
-  		while(r[0] < 100 || r[1] < 100 || r[2] < 100)
+  		while( !this.stop && (r[0] < 100 || r[1] < 100 || r[2] < 100) )
     	{
 
-    			while ( r[0] < 100 && recu != 0)
+    			while (!this.stop &&  r[0] < 100 && recu != 0)
     			{
     				recu = or.getOr(10);
     	  		c.addOr(recu);
@@ -124,7 +137,7 @@ class Client_thread extends Thread {
     	  	recu = 1;
 
 
-    	  	while ( r[1] < 100 && recu != 0 )
+    	  	while (!this.stop && r[1] < 100 && recu != 0 )
     	  	{
     	  		recu = argent.getArgent(10);
     	  		c.addArgent(recu);
@@ -134,7 +147,7 @@ class Client_thread extends Thread {
       		recu = 1;
 
 
-      		while  ( r[2] < 100 && recu != 0 )
+      		while  (!this.stop&& r[2] < 100 && recu != 0 )
       		{
 						recu = bronze.getBronze(10);
       			c.addBronze(recu);
@@ -152,10 +165,10 @@ class Client_thread extends Thread {
 			int recu=1;
 			int vol=0;
 			int i=0;
-  		while(r[0] < 100 || r[1] < 100 || r[2] < 100)
+  		while( !this.stop && (r[0] < 100 || r[1] < 100 || r[2] < 100) )
     	{
 
-    			while ( r[0] < 100 && recu != 0)
+    			while ( !this.stop && r[0] < 100 && recu != 0)
     			{
     				recu = or.getOr(10);
     	  		c.addOr(recu);
@@ -166,6 +179,8 @@ class Client_thread extends Thread {
     	  	}
 
 					// VOL SI JAMAIS PLUS D'OR DISPONIBLE
+					if ( !this.stop && this.vol )
+					{
 					if ( r[0] < 100 )
 					{
 					t = Tache.VOL;
@@ -184,13 +199,14 @@ class Client_thread extends Thread {
 					sleep(100);
 					i= (i+1) %(nbclient-1) ;
 					}
+					}
 
 					System.out.println("Ressources disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
 
     	  	recu = 1;
 
 
-    	  	while ( r[1] < 100 && recu != 0 )
+    	  	while ( !this.stop && r[1] < 100 && recu != 0 )
     	  	{
     	  		recu = argent.getArgent(10);
     	  		c.addArgent(recu);
@@ -201,6 +217,8 @@ class Client_thread extends Thread {
       		}
 
 					// VOL SI JAMAIS PLUS D'ARGENT DISPONIBLE
+					if ( !this.stop && this.vol )
+					{
 					if ( r[1] < 100 )
 					{
 					t = Tache.VOL;
@@ -219,13 +237,14 @@ class Client_thread extends Thread {
 					sleep(100);
 					i= (i+1) %(nbclient-1) ;
 					}
+					}
 
 					System.out.println("Ressources disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
 
       		recu = 1;
 
 
-      		while  ( r[2] < 100 && recu != 0 )
+      		while  ( !this.stop && r[2] < 100 && recu != 0 )
       		{
 						recu = bronze.getBronze(10);
       			c.addBronze(recu);
@@ -236,6 +255,8 @@ class Client_thread extends Thread {
       		}
 
 					// VOL SI JAMAIS PLUS DE BRONZE DISPONIBLE
+					if ( !this.stop && this.vol )
+					{
 					if ( r[2] < 100 )
 					{
 					t = Tache.VOL;
@@ -254,6 +275,7 @@ class Client_thread extends Thread {
 					sleep(100);
 					i= (i+1) %(nbclient-1) ;
 					}
+					}
 
 					System.out.println("Ressources disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
 
@@ -268,16 +290,16 @@ class Client_thread extends Thread {
 			int recu=1;
 			int vol=0;
 			int i=0;
-  		while(r[0] < 100 || r[1] < 100 || r[2] < 100)
+  		while(!this.stop && r[0] < 100 || r[1] < 100 || r[2] < 100)
     	{
 
-    			while ( r[0] < 100 && recu != 0)
+    			while (!this.stop &&  r[0] < 100 && recu != 0)
     			{
     				recu = or.getOr(10);
     	  		c.addOr(recu);
 						if (recu != 0)
 							System.out.println("Je recupère 10 or");
-						t = Tache.OBSERVATION;
+						if ( observation ) t = Tache.OBSERVATION;
     	  		sleep(100);
 						t = Tache.RECOLTE;
 						r = c.getAmountRess();
@@ -288,13 +310,15 @@ class Client_thread extends Thread {
     	  	recu = 1;
 
 
-    	  	while ( r[1] < 100 && recu != 0 )
+    	  	while (!this.stop && r[1] < 100 && recu != 0 )
     	  	{
     	  		recu = argent.getArgent(10);
     	  		c.addArgent(recu);
 						if (recu != 0)
 							System.out.println("Je recupère 10 argent");
+						if ( observation ) t = Tache.OBSERVATION;
     	  		sleep(100);
+						t = Tache.RECOLTE;
 						r = c.getAmountRess();
       		}
 
@@ -303,13 +327,13 @@ class Client_thread extends Thread {
       		recu = 1;
 
 
-      		while  ( r[2] < 100 && recu != 0 )
+      		while  (!this.stop && r[2] < 100 && recu != 0 )
       		{
 						recu = bronze.getBronze(10);
       			c.addBronze(recu);
 						if (recu != 0)
 							System.out.println("Je recupère 10 bronze");
-						t = Tache.OBSERVATION;
+						if ( observation ) t = Tache.OBSERVATION;
 		 				sleep(100);
 		 				t = Tache.RECOLTE;
 						r = c.getAmountRess();
@@ -321,23 +345,29 @@ class Client_thread extends Thread {
 
 
     	}
-			t = Tache.RECOLTE;
+
 		}
 		else if ( this.p == Personnalite.COOPERATIFMALIN )
   	{
   		int recu=1;
 
-  		while(r[0] < 100 || r[1] < 100 || r[2] < 100)
+  		while(!this.stop && r[0] < 100 || r[1] < 100 || r[2] < 100)
     	{
 
-    			while ( r[0] < 100 && recu != 0)
+    			while (!this.stop && r[0] < 100 && recu != 0)
     			{
-						t = Tache.OBSERVATION;
+						if ( observation )
+						{ t = Tache.OBSERVATION;
 						productress = or.getAmountRess();
 						t = Tache.RECOLTE;
     				recu = or.getOr(productress[0]);
+						}
+						else
+						{
+							recu = or.getOr(10);
+						}
     	  		c.addOr(recu);
-						t = Tache.OBSERVATION;
+						if ( observation ) t = Tache.OBSERVATION;
     	  		sleep(100);
 						t = Tache.RECOLTE;
 						r = c.getAmountRess();
@@ -345,14 +375,21 @@ class Client_thread extends Thread {
     	  	recu = 1;
 
 
-    	  	while ( r[1] < 100 && recu != 0 )
+    	  	while (!this.stop && r[1] < 100 && recu != 0 )
     	  	{
+						if ( observation )
+						{
 						t = Tache.OBSERVATION;
 						productress = argent.getAmountRess();
 						t = Tache.RECOLTE;
     				recu = argent.getArgent(productress[1]);
+						}
+						else
+						{
+							recu = or.getArgent(10);
+						}
     	  		c.addArgent(recu);
-						t = Tache.OBSERVATION;
+						if ( observation ) t = Tache.OBSERVATION;
     	  		sleep(100);
 						t = Tache.RECOLTE;
 						r = c.getAmountRess();
@@ -360,14 +397,21 @@ class Client_thread extends Thread {
       		recu = 1;
 
 
-      		while  ( r[2] < 100 && recu != 0 )
+      		while  (!this.stop && r[2] < 100 && recu != 0 )
       		{
+						if ( observation )
+						{
 						t = Tache.OBSERVATION;
 						productress = bronze.getAmountRess();
 						t = Tache.RECOLTE;
     				recu = bronze.getBronze(productress[2]);
+						}
+						else
+						{
+							recu = or.getBronze(10);
+						}
       			c.addBronze(recu);
-						t = Tache.OBSERVATION;
+						if ( observation ) t = Tache.OBSERVATION;
     	  		sleep(100);
 						t = Tache.RECOLTE;
 						r = c.getAmountRess();
@@ -383,12 +427,22 @@ class Client_thread extends Thread {
 	catch (RemoteException re) { System.out.println(re) ; }
 	catch (InterruptedException re) { System.out.println(re) ; }
 
-    System.out.println("Ressources disponible : OR -> "+ c.or +" ARGENT -> "+ c.argent +" BRONZE -> "+ c.bronze );
-		try
+		try{
+		int[] r = c.getAmountRess();
+		if( r[0] == 100 || r[1] == 100 || r[2] == 100 )
 		{
+    System.out.println("Ressources disponible : OR -> "+ c.or +" ARGENT -> "+ c.argent +" BRONZE -> "+ c.bronze );
+
 		coord.fini(noclient);
-		}catch (RemoteException re) { System.out.println(re) ; }
+
     System.out.println("J'ai fini " );
+		}
+		else
+		{
+			System.out.println("Partie terminée" );
+		}
+		}catch (RemoteException re) { System.out.println(re) ; }
+
 
   }
 

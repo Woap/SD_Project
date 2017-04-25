@@ -17,6 +17,9 @@ public interface Client extends Remote
   public void addBronze(int value)
     throws RemoteException ;
 
+  public void stopRecolte()
+    throws RemoteException ;
+
   public int[] getAmountRess()
     throws RemoteException ;
 

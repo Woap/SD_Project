@@ -21,6 +21,6 @@ public interface Product extends Remote
   public int[] getAmountRess()
     throws RemoteException ;
 
-  public void stopproduction()
+  public void stopProduction()
     throws RemoteException ;
 }

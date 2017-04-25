@@ -7,9 +7,9 @@ public class Productargent
 {
   public static void main(String [] args)
   {
-    if (args.length != 1)
+    if (args.length != 2)
     {
-      System.out.println("Usage : java Serveur <port du rmiregistry>") ;
+      System.out.println("Usage : java Serveur <port du rmiregistry> <epuisable>") ;
       System.exit(0) ;
     }
     try
@@ -17,7 +17,7 @@ public class Productargent
       Product_thread t = new Product_thread();
       ProductImpl objLocal = new ProductImpl (t,false,true,false,0,2,0) ;
       Naming.rebind( "rmi://localhost:6666/Productargent" ,objLocal) ;
-      t.setOptions(objLocal,false,true,false);
+      t.setOptions(objLocal,false,true,false,Integer.parseInt(args[1]));
       System.out.println("Productargent pret") ;
     }
     catch (RemoteException re) { System.out.println(re) ; }

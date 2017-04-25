@@ -16,6 +16,8 @@ public class ProductImpl
 	protected boolean Pargent = false;
 	protected boolean Pbronze = false;
 
+  protected boolean epuisable=true;
+
   protected Product_thread t;
 
   public ProductImpl (Product_thread t,boolean Por, boolean Pargent, boolean Pbronze, int or, int argent, int bronze)
@@ -26,9 +28,11 @@ public class ProductImpl
     this.Por = Por;
     this.Pargent = Pargent;
     this.Pbronze = Pbronze;
+
     this.or = or;
     this.argent = argent;
     this.bronze = bronze;
+
     System.out.println("Ressource disponible : OR -> "+ this.or +" ARGENT -> "+ this.argent +" BRONZE -> "+ this.bronze );
   } ;
 
@@ -103,10 +107,10 @@ public class ProductImpl
 
   }
 
-  public void stopproduction()
+  public void stopProduction()
     throws RemoteException
     {
-      t.stopproduction();
+      t.stopProduction();
     }
 
 }

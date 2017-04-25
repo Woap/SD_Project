@@ -20,7 +20,7 @@ public class CoordinateurImpl
   protected int ordonnees = 0; // client ordonnees ?
 	protected int humain = 0; // humain qui joue ?
   protected int fin = 0; // true = premier qui fini / false = tout le monde à fini
-  protected int nbclient=0;
+  protected int nbclient=0; // nombre de client
 
   protected Product o;
   protected Product a;
@@ -35,6 +35,7 @@ public class CoordinateurImpl
     this.nbclient = nbclient;
     this.ordonnees = ordonnees;
     this.humain = humain;
+    this.fin = fin;
     tableauclassement = new ArrayList<Integer>();
 
     if ( this.ordonnees == 1 )
@@ -46,6 +47,9 @@ public class CoordinateurImpl
         		tour.add(client);
         }
     }
+    System.out.println("Ordonnes : " + this.ordonnees  );
+    System.out.println("Humain : " + this.humain );
+    System.out.println("Fin : " + fin );
     System.out.println("Coordinateur prêt");
 
     } ;
@@ -82,18 +86,21 @@ public class CoordinateurImpl
   }
 
 
-  public void fini (int client)
+  public synchronized void fini (int client)
   throws RemoteException
   {
+
+     if ( fin == 0 )
+     {
 	   System.out.println("Le client "+ client + "(" + this.clientlist.get(client-1).getPersonnalite() + ") " + " termine à la position "+ classement  );
      classement++;
      tableauclassement.add(client);
 
      if ( tableauclassement.size() == this.nbclient )
      {
-       o.stopproduction();
-       a.stopproduction();
-       b.stopproduction();
+       o.stopProduction();
+       a.stopProduction();
+       b.stopProduction();
 
        System.out.println("Fin de la partie");
        System.out.println("Voici le classement");
@@ -103,6 +110,20 @@ public class CoordinateurImpl
        }
      }
 
+    }
+    else
+    {
+      System.out.println("Le client "+ client + "(" + this.clientlist.get(client-1).getPersonnalite() + ") " + " gagne la partie");
+      o.stopProduction();
+      a.stopProduction();
+      b.stopProduction();
+
+      for (Client object: clientlist) {
+          object.stopRecolte();
+        }
+
+
+    }
   }
 
 }
