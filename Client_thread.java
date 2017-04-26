@@ -4,8 +4,12 @@ import java.rmi.RemoteException ;
 import java.util.ArrayList;
 import java.rmi.* ;
 import java.net.MalformedURLException ;
+import java.util.Date;
+import java.io.PrintWriter;
+import java.io.IOException;
 
-// ./construit 0 0 1 1 0 1 1 1 0 0 1 1 1
+// ./construit 0 0 1 1 0 1 1 1 1 0 1 1 1 1
+
 
 
 class Client_thread extends Thread {
@@ -20,18 +24,23 @@ class Client_thread extends Thread {
 	protected int noclient;
 	protected int nbclient;
 
+	protected int ordonnees;
+	protected boolean recolte= false;
+
+
 	protected boolean observation=false;
 	protected boolean vol=false;
 
 	protected boolean stop=false;
 
-
+	protected Client_log_thread log;
 	protected ArrayList<Client> clientlist;
 
 	public void Client_thread(){}
 
-  public void setOptions(ClientImpl c,Personnalite p,int noclient, int nbclient,int observation, int vol)
+  public void setOptions(ClientImpl c,Personnalite p,int noclient, int nbclient,int observation, int vol,Client_log_thread log)
   {
+	this.log = log;
 	this.c = c; // Parent
   this.p = p;
 	this.noclient = noclient;
@@ -40,8 +49,9 @@ class Client_thread extends Thread {
 	if ( vol == 1) this.vol = true;
   }
 
-	public void lancement()
+	public void lancement(int ordonnees)
 	{
+		this.ordonnees = ordonnees;
 		try {
 		this.or = (Product) Naming.lookup( "rmi://localhost:6666/Productor" ) ;
 		this.argent = (Product) Naming.lookup( "rmi://localhost:6666/Productargent" ) ;
@@ -64,7 +74,7 @@ class Client_thread extends Thread {
 		catch (NotBoundException re) { System.out.println(re) ; }
 		catch (RemoteException re) { System.out.println(re) ; }
 		catch (MalformedURLException e) { System.out.println(e) ; }
-
+		log.lancement();
 		this.start();
 		System.out.println("Lancement de la récolte" );
 	}
@@ -84,12 +94,30 @@ class Client_thread extends Thread {
 		this.stop=true;
 	}
 
+	public void attenteTour()
+	{
+		recolte=false;
+		while ( recolte == false)
+		{
+			try{
+			Thread.sleep(2000);
+			}catch (InterruptedException re) { System.out.println(re) ; }
+		}
+	}
+
+	public void tonTour()
+	{
+		System.out.println("C'est mon tour");
+		recolte=true;
+	}
+
+
 	public void run(){
 
 	try {
 	int[] r = c.getAmountRess();
 	int[] productress;
-
+	if ( ordonnees == 1 ) attenteTour();
   if ( this.p == Personnalite.INDIVIDUALISTE )
   {
   		while( !this.stop && (r[0] < 100 || r[1] < 100 || r[2] < 100) )
@@ -97,15 +125,17 @@ class Client_thread extends Thread {
     			if (!this.stop &&  r[0] < 100)
     			{
     	  		c.addOr(or.getOr(10));
+
+
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
     	  		sleep(100);
 						r = c.getAmountRess();
     	  	}
 
-					//System.out.println("Ressource disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
-
     	  	if (!this.stop && r[0] == 100 && r[1] < 100 )
     	  	{
     	  		c.addArgent(argent.getArgent(10));
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
     	  		sleep(100);
 						r = c.getAmountRess();
       		}
@@ -114,6 +144,7 @@ class Client_thread extends Thread {
       		if (!this.stop && r[1] == 100 && r[2] < 100 )
       		{
       			c.addBronze(bronze.getBronze(10));
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
       			sleep(100);
 						r = c.getAmountRess();
       		}
@@ -429,6 +460,7 @@ class Client_thread extends Thread {
 
 		try{
 		int[] r = c.getAmountRess();
+		log.arret_log();
 		if( r[0] == 100 || r[1] == 100 || r[2] == 100 )
 		{
     System.out.println("Ressources disponible : OR -> "+ c.or +" ARGENT -> "+ c.argent +" BRONZE -> "+ c.bronze );

@@ -21,10 +21,10 @@ public class ClientImpl
     System.out.println("Ressource acquise : OR -> "+ this.or +" ARGENT -> "+ this.argent +" BRONZE -> "+ this.bronze );
   } ;
 
-  public void lancement()
+  public void lancement(int ordonnees)
   throws RemoteException
   {
-    t.lancement();
+    t.lancement(ordonnees);
   }
 
   public void stopRecolte()
@@ -154,5 +154,11 @@ public class ClientImpl
 	{
 		return t.getPersonnalite();
 	}
+
+  public void tonTour()
+    throws RemoteException
+  {
+    t.tonTour();
+  }
 
 }

@@ -12,5 +12,11 @@ public interface Coordinateur extends Remote
   public void lancement()
     throws RemoteException ;
 
+    public  void tourFini ()
+    throws RemoteException;
+
+  public void lancementJeuTourParTour()
+  throws RemoteException;
+
 
 }

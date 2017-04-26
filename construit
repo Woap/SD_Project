@@ -19,7 +19,7 @@ mkdir tProductbronze
 mkdir tCoordinateur
 mkdir tClient
 
-for i in Client Clienttype ClientImpl ProductImpl Product_thread Product Client_thread Personnalite Coordinateur Coordinateurtype CoordinateurImpl Tache
+for i in Client Clienttype ClientImpl Client_log_thread ProductImpl Product_thread Product Client_thread Personnalite Coordinateur Coordinateurtype CoordinateurImpl Tache
 do  cp $i.class tClient ; done
 
 for i in Coordinateur Coordinateurtype CoordinateurImpl Client Clienttype ClientImpl ProductImpl Product_thread Product Client_thread Personnalite Tache

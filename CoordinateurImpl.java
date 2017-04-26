@@ -22,6 +22,8 @@ public class CoordinateurImpl
   protected int fin = 0; // true = premier qui fini / false = tout le monde à fini
   protected int nbclient=0; // nombre de client
 
+  protected int tourfini=0;
+
   protected Product o;
   protected Product a;
   protected Product b;
@@ -41,7 +43,7 @@ public class CoordinateurImpl
     if ( this.ordonnees == 1 )
     {
         tour= new ArrayList<Boolean>();
-        for ( int i = 0 ; i < clientlist.size() ; i++ )
+        for ( int i = 0 ; i < nbclient ; i++ )
         {
         		boolean client = false;
         		tour.add(client);
@@ -80,9 +82,40 @@ public class CoordinateurImpl
     a.lancement();
     b.lancement();
     for (Client object: clientlist) {
-        object.lancement();
+        object.lancement(ordonnees);
       }
 
+    if ( ordonnees == 1)
+      lancementJeuTourParTour();
+
+  }
+
+  public void lancementJeuTourParTour()
+  throws RemoteException
+  {
+    while(true)
+    {
+      for (Client object: clientlist) {
+          tourfini=0;
+          try{
+          object.tonTour();
+          while ( tourfini == 0)
+          {
+
+            Thread.sleep(100);
+
+          }
+          }catch (InterruptedException re) { System.out.println(re) ; }
+          catch (RemoteException re) { System.out.println(re) ; }
+        }
+
+    }
+  }
+
+  public synchronized void tourFini ()
+  throws RemoteException
+  {
+    this.tourfini=1;
   }
 
 

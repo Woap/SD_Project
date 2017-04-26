@@ -5,7 +5,7 @@ import java.rmi.RemoteException ;
 
 public interface Client extends Remote
 {
-  public void lancement()
+  public void lancement(int ordonnees)
     throws RemoteException ;
 
   public void addOr(int value)
@@ -36,6 +36,9 @@ public interface Client extends Remote
     throws RemoteException ;
 
   public Tache getTacheActuel()
+    throws RemoteException ;
+
+  public void tonTour()
     throws RemoteException ;
 
 
