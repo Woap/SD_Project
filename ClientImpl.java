@@ -60,7 +60,7 @@ public class ClientImpl
   public synchronized int volOr(int value)
   throws RemoteException
   {
-    if ( this.or != 100 && this.argent != 100 && this.bronze != 100)
+    if ( this.or != 100 && this.argent != 100 && this.bronze != 100) // Si je n'ai pas fini
     {
       if ( t.getTacheActuel() != Tache.OBSERVATION ) // Si pendant le vol je suis en observation
       {

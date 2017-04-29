@@ -49,9 +49,6 @@ public class CoordinateurImpl
         		tour.add(client);
         }
     }
-    System.out.println("Ordonnes : " + this.ordonnees  );
-    System.out.println("Humain : " + this.humain );
-    System.out.println("Fin : " + fin );
     System.out.println("Coordinateur prêt");
 
     } ;
@@ -71,6 +68,7 @@ public class CoordinateurImpl
     for ( int i = 1 ; i <= this.nbclient ; i++ )
     {
         client = (Client) Naming.lookup( "rmi://localhost:6666/Client"+i );
+        System.out.println("Client "+i +" " + client.getPersonnalite());
         clientlist.add(client);
     }
     }
@@ -83,10 +81,13 @@ public class CoordinateurImpl
     b.lancement();
     for (Client object: clientlist) {
         object.lancement(ordonnees);
+
       }
 
     if ( ordonnees == 1)
       lancementJeuTourParTour();
+
+    System.out.println("Lancement de la partie");
 
   }
 

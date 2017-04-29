@@ -100,7 +100,7 @@ class Client_thread extends Thread {
 		while ( recolte == false)
 		{
 			try{
-			Thread.sleep(2000);
+			Thread.sleep(100);
 			}catch (InterruptedException re) { System.out.println(re) ; }
 		}
 	}
@@ -162,6 +162,7 @@ class Client_thread extends Thread {
     			{
     				recu = or.getOr(10);
     	  		c.addOr(recu);
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
     	  		sleep(100);
 						r = c.getAmountRess();
     	  	}
@@ -172,6 +173,7 @@ class Client_thread extends Thread {
     	  	{
     	  		recu = argent.getArgent(10);
     	  		c.addArgent(recu);
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
     	  		sleep(100);
 						r = c.getAmountRess();
       		}
@@ -182,6 +184,7 @@ class Client_thread extends Thread {
       		{
 						recu = bronze.getBronze(10);
       			c.addBronze(recu);
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
       			sleep(100);
 						r = c.getAmountRess();
       		}
@@ -205,6 +208,7 @@ class Client_thread extends Thread {
     	  		c.addOr(recu);
 						if (recu != 0)
 							System.out.println("Je recupère 10 or");
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
     	  		sleep(100);
 						r = c.getAmountRess();
     	  	}
@@ -217,22 +221,27 @@ class Client_thread extends Thread {
 					t = Tache.VOL;
 					vol = clientlist.get(i %(nbclient-1)).volOr(10);
 					t = Tache.RECOLTE;
+
+					if (vol >= 0)
+						System.out.println("Je vole 10 or" + " du client "+ (i+1));
 					if ( vol != -1)
+					{
 						c.addOr(vol);
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
+					}
 					else
 					{
 						System.out.println("Je me suis fait voir pendant le vol, pénalité de 2 sec");
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
 						sleep(2000);
 					}
-					if (vol >= 0)
-						System.out.println("Je vole 10 or" + " du client "+ (i+1));
-					r = c.getAmountRess();
 					sleep(100);
+					r = c.getAmountRess();
 					i= (i+1) %(nbclient-1) ;
 					}
 					}
 
-					System.out.println("Ressources disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
+
 
     	  	recu = 1;
 
@@ -243,6 +252,7 @@ class Client_thread extends Thread {
     	  		c.addArgent(recu);
 						if (recu != 0)
 							System.out.println("Je recupère 10 argent");
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
     	  		sleep(100);
 						r = c.getAmountRess();
       		}
@@ -255,22 +265,27 @@ class Client_thread extends Thread {
 					t = Tache.VOL;
 					vol = clientlist.get(i %(nbclient-1)).volArgent(10);
 					t = Tache.RECOLTE;
+					if (vol >= 0)
+					System.out.println("Je vole 10 argent" + " du client "+ (i+1));
 					if ( vol != -1)
+					{
 						c.addArgent(vol);
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
+					}
 						else
 						{
 							System.out.println("Je me suis fait voir pendant le vol, pénalité de 2 sec");
+							if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
 							sleep(2000);
 						}
-						if (vol >= 0)
-						System.out.println("Je vole 10 argent" + " du client "+ (i+1));
+
 					r = c.getAmountRess();
 					sleep(100);
 					i= (i+1) %(nbclient-1) ;
 					}
 					}
 
-					System.out.println("Ressources disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
+
 
       		recu = 1;
 
@@ -281,6 +296,7 @@ class Client_thread extends Thread {
       			c.addBronze(recu);
 						if (recu != 0)
 							System.out.println("Je recupère 10 bronze");
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
       			sleep(100);
 						r = c.getAmountRess();
       		}
@@ -293,15 +309,20 @@ class Client_thread extends Thread {
 					t = Tache.VOL;
 					vol = clientlist.get(i %(nbclient-1)).volBronze(10);
 					t = Tache.RECOLTE;
+					if (vol >= 0)
+						System.out.println("Je vole 10 bronze" + " du client "+ (i+1));
 					if ( vol != -1)
-					c.addBronze(vol);
+					{
+						c.addBronze(vol);
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
+					}
 					else
 					{
 						System.out.println("Je me suis fait voir pendant le vol, pénalité de 2 sec");
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
 						sleep(2000);
 					}
-					if (vol >= 0)
-						System.out.println("Je vole 10 bronze" + " du client "+ (i+1));
+
 					r = c.getAmountRess();
 					sleep(100);
 					i= (i+1) %(nbclient-1) ;
@@ -331,6 +352,7 @@ class Client_thread extends Thread {
 						if (recu != 0)
 							System.out.println("Je recupère 10 or");
 						if ( observation ) t = Tache.OBSERVATION;
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
     	  		sleep(100);
 						t = Tache.RECOLTE;
 						r = c.getAmountRess();
@@ -348,6 +370,7 @@ class Client_thread extends Thread {
 						if (recu != 0)
 							System.out.println("Je recupère 10 argent");
 						if ( observation ) t = Tache.OBSERVATION;
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
     	  		sleep(100);
 						t = Tache.RECOLTE;
 						r = c.getAmountRess();
@@ -365,6 +388,7 @@ class Client_thread extends Thread {
 						if (recu != 0)
 							System.out.println("Je recupère 10 bronze");
 						if ( observation ) t = Tache.OBSERVATION;
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
 		 				sleep(100);
 		 				t = Tache.RECOLTE;
 						r = c.getAmountRess();
@@ -391,7 +415,7 @@ class Client_thread extends Thread {
 						{ t = Tache.OBSERVATION;
 						productress = or.getAmountRess();
 						t = Tache.RECOLTE;
-    				recu = or.getOr(productress[0]);
+    				recu = or.getOr(productress[0]%10);
 						}
 						else
 						{
@@ -399,9 +423,11 @@ class Client_thread extends Thread {
 						}
     	  		c.addOr(recu);
 						if ( observation ) t = Tache.OBSERVATION;
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
     	  		sleep(100);
 						t = Tache.RECOLTE;
 						r = c.getAmountRess();
+						System.out.println("Ressources disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
     	  	}
     	  	recu = 1;
 
@@ -413,7 +439,7 @@ class Client_thread extends Thread {
 						t = Tache.OBSERVATION;
 						productress = argent.getAmountRess();
 						t = Tache.RECOLTE;
-    				recu = argent.getArgent(productress[1]);
+    				recu = argent.getArgent(productress[1]%10);
 						}
 						else
 						{
@@ -421,9 +447,11 @@ class Client_thread extends Thread {
 						}
     	  		c.addArgent(recu);
 						if ( observation ) t = Tache.OBSERVATION;
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
     	  		sleep(100);
 						t = Tache.RECOLTE;
 						r = c.getAmountRess();
+						System.out.println("Ressources disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
       		}
       		recu = 1;
 
@@ -435,7 +463,7 @@ class Client_thread extends Thread {
 						t = Tache.OBSERVATION;
 						productress = bronze.getAmountRess();
 						t = Tache.RECOLTE;
-    				recu = bronze.getBronze(productress[2]);
+    				recu = bronze.getBronze(productress[2]%10);
 						}
 						else
 						{
@@ -443,9 +471,11 @@ class Client_thread extends Thread {
 						}
       			c.addBronze(recu);
 						if ( observation ) t = Tache.OBSERVATION;
+						if ( ordonnees == 1 ){coord.tourFini(); attenteTour(); }
     	  		sleep(100);
 						t = Tache.RECOLTE;
 						r = c.getAmountRess();
+						System.out.println("Ressources disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
       		}
       		recu = 1;
 					System.out.println("Ressources disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
@@ -459,8 +489,9 @@ class Client_thread extends Thread {
 	catch (InterruptedException re) { System.out.println(re) ; }
 
 		try{
-		int[] r = c.getAmountRess();
 		log.arret_log();
+		int[] r = c.getAmountRess();
+
 		if( r[0] == 100 || r[1] == 100 || r[2] == 100 )
 		{
     System.out.println("Ressources disponible : OR -> "+ c.or +" ARGENT -> "+ c.argent +" BRONZE -> "+ c.bronze );
