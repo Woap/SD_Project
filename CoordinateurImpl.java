@@ -5,6 +5,9 @@ import java.rmi.RemoteException ;
 import java.util.ArrayList;
 import java.rmi.* ;
 import java.net.MalformedURLException ;
+import java.util.Date;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class CoordinateurImpl
   extends UnicastRemoteObject
@@ -152,10 +155,16 @@ public class CoordinateurImpl
 
      if ( fin == 0 )
      {
+       try {
+       FileWriter writer = new FileWriter("../Logs/resultat", true);
+       writer.flush();
 	   System.out.println("Le client "+ client + "(" + this.clientlist.get(client-1).getPersonnalite() + ") " + " termine à la position "+ classement  );
+     writer.append("" + this.clientlist.get(client-1).getPersonnalite() +" " + classement+ "\n"  );
+     writer.close();
+     } catch (IOException e) { System.out.println(e) ; }
      classement++;
      tableauclassement.add(client);
-    
+
      if ( tableauclassement.size() == this.nbclient )
      {
 
@@ -173,10 +182,14 @@ public class CoordinateurImpl
 
        System.out.println("Fin de la partie");
        System.out.println("Voici le classement");
+
+
        for ( int i = 0 ; i < tableauclassement.size() ; i++ )
        {
           System.out.println(i+1 +". Client" + tableauclassement.get(i));
+
        }
+
      }
 
     }

@@ -204,7 +204,7 @@ class Client_thread extends Thread {
 						ior= (ior + 1) %(nbpor);
     	  	}
     	  	recu = 1;
-
+					System.out.println("Ressources disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
 
     	  	while (!this.stop && r[1] < 100 && recu != 0 )
     	  	{
@@ -217,7 +217,7 @@ class Client_thread extends Thread {
 
       		}
       		recu = 1;
-
+					System.out.println("Ressources disponible : OR -> "+ r[0] +" ARGENT -> "+ r[1] +" BRONZE -> "+ r[2] );
 
       		while  (!this.stop&& r[2] < 100 && recu != 0 )
       		{
