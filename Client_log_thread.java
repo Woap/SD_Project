@@ -24,6 +24,8 @@ class Client_log_thread extends Thread {
 	this.noclient = noclient;
   }
 
+
+
 	public void lancement()
 	{
 		this.start();
@@ -60,7 +62,7 @@ class Client_log_thread extends Thread {
   r = c.getAmountRess();
   writer.append("\n{ t: '"+iteration+"', or: '"+r[0]+"', argent: '"+r[1]+"', bronze: '"+r[2]+"'}");
   writer.flush();
-  writer.append("\n],\n\tconfig = {\n\t\tdata: data,\n\t\txkey: 't',\n\t\tykeys: ['or', 'argent','bronze'],\n\t\tlabels: ['or', 'argent','bronze'],\n\t\tfillOpacity: 0.6,\n\t\thideHover: 'auto',\n\t\tbehaveLikeLine: true,\n\t\tresize: true,\n\t\tpointFillColors:['#ffffff'],\n\t\tpointStrokeColors: ['black'],\n\t\tparseTime:false,\n\t\tlineColors:['gray','red','blue']\n\t};\nconfig.element = 'client"+noclient+"';\nMorris.Line(config);");
+  writer.append("\n],\n\tconfig = {\n\t\tdata: data,\n\t\txkey: 't',\n\t\tykeys: ['or', 'argent','bronze'],\n\t\tlabels: ['or', 'argent','bronze'],\n\t\tfillOpacity: 0.8,\n\t\thideHover: 'auto',\n\t\tbehaveLikeLine: true,\n\t\tresize: true,\n\t\tpointFillColors:['#ffffff'],\n\t\tpointStrokeColors: ['black'],\n\t\tparseTime:false,\n\t\tlineColors:['#f4bf42','red','blue']\n\t};\nconfig.element = 'client"+noclient+"';\nMorris.Line(config);");
     writer.close();
 
   } catch (IOException e) { System.out.println(e) ; }

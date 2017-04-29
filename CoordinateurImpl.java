@@ -13,10 +13,13 @@ public class CoordinateurImpl
 
 
   protected int classement=1;
-  protected ArrayList<Boolean> tour;
   protected ArrayList<Integer> tableauclassement;
   protected ArrayList<Client> clientlist;
+  protected ArrayList<Product> o;
+  protected ArrayList<Product> a;
+  protected ArrayList<Product> b;
 
+  protected Boolean premier=false;
   protected int ordonnees = 0; // client ordonnees ?
 	protected int humain = 0; // humain qui joue ?
   protected int fin = 0; // true = premier qui fini / false = tout le monde à fini
@@ -24,13 +27,15 @@ public class CoordinateurImpl
 
   protected int tourfini=0;
 
-  protected Product o;
-  protected Product a;
-  protected Product b;
+  private final Object lock = new Object();
+
+  protected int nbpor;
+	protected int nbpargent;
+	protected int nbpbronze;
 
 
 
-  public CoordinateurImpl (int nbclient,int ordonnees,int humain, int fin)
+  public CoordinateurImpl (int nbclient,int ordonnees,int humain, int fin,int por,int pargent,int pbronze)
     throws RemoteException
   {
     super();
@@ -38,19 +43,11 @@ public class CoordinateurImpl
     this.ordonnees = ordonnees;
     this.humain = humain;
     this.fin = fin;
-    tableauclassement = new ArrayList<Integer>();
-
-    if ( this.ordonnees == 1 )
-    {
-        tour= new ArrayList<Boolean>();
-        for ( int i = 0 ; i < nbclient ; i++ )
-        {
-        		boolean client = false;
-        		tour.add(client);
-        }
-    }
-    System.out.println("Coordinateur prêt");
-
+    this.nbpor = por;
+    this.nbpargent= pargent;
+    this.nbpbronze= pbronze;
+    this.tableauclassement = new ArrayList<Integer>();
+    System.out.println("Coordinateur prêt ");
     } ;
 
   public void lancement()
@@ -58,9 +55,29 @@ public class CoordinateurImpl
   {
 
     try {
-    this.o = (Product) Naming.lookup( "rmi://localhost:6666/Productor" ) ;
-    this.a = (Product) Naming.lookup( "rmi://localhost:6666/Productargent" ) ;
-    this.b = (Product) Naming.lookup( "rmi://localhost:6666/Productbronze" ) ;
+      Product p;
+      this.o = new ArrayList<Product>();
+      this.a = new ArrayList<Product>();
+      this.b = new ArrayList<Product>();
+
+      for ( int i = 1 ; i <= this.nbpor ; i++ )
+      {
+        p = (Product) Naming.lookup( "rmi://localhost:6666/Productor"+i ) ;
+        o.add(p);
+      }
+
+      for ( int i = 1 ; i <= this.nbpargent ; i++ )
+      {
+        p = (Product) Naming.lookup( "rmi://localhost:6666/Productargent"+i ) ;
+        a.add(p);
+      }
+
+      for ( int i = 1 ; i <= this.nbpbronze ; i++ )
+      {
+        p = (Product) Naming.lookup( "rmi://localhost:6666/Productbronze"+i ) ;
+        b.add(p);
+      }
+
 
     this.clientlist = new ArrayList<Client>();
 
@@ -70,19 +87,28 @@ public class CoordinateurImpl
         client = (Client) Naming.lookup( "rmi://localhost:6666/Client"+i );
         System.out.println("Client "+i +" " + client.getPersonnalite());
         clientlist.add(client);
+
     }
     }
     catch (NotBoundException re) { System.out.println(re) ; }
     catch (RemoteException re) { System.out.println(re) ; }
     catch (MalformedURLException e) { System.out.println(e) ; }
 
-    o.lancement();
-    a.lancement();
-    b.lancement();
     for (Client object: clientlist) {
         object.lancement(ordonnees);
-
       }
+
+      for (Product object: o) {
+          object.lancement();
+        }
+
+        for (Product object: a) {
+            object.lancement();
+          }
+
+          for (Product object: b) {
+              object.lancement();
+            }
 
     if ( ordonnees == 1)
       lancementJeuTourParTour();
@@ -129,12 +155,21 @@ public class CoordinateurImpl
 	   System.out.println("Le client "+ client + "(" + this.clientlist.get(client-1).getPersonnalite() + ") " + " termine à la position "+ classement  );
      classement++;
      tableauclassement.add(client);
-
+    
      if ( tableauclassement.size() == this.nbclient )
      {
-       o.stopProduction();
-       a.stopProduction();
-       b.stopProduction();
+
+       for (Product object: o) {
+           object.stopProduction();
+         }
+
+         for (Product object: a) {
+             object.stopProduction();
+           }
+
+           for (Product object: b) {
+               object.stopProduction();
+             }
 
        System.out.println("Fin de la partie");
        System.out.println("Voici le classement");
@@ -147,14 +182,30 @@ public class CoordinateurImpl
     }
     else
     {
-      System.out.println("Le client "+ client + "(" + this.clientlist.get(client-1).getPersonnalite() + ") " + " gagne la partie");
-      o.stopProduction();
-      a.stopProduction();
-      b.stopProduction();
 
+      if ( !premier )
+      {
+        synchronized (lock) {
+        premier = true;
+        }
+
+      System.out.println("Le client "+ client + "(" + this.clientlist.get(client-1).getPersonnalite() + ") " + " gagne la partie");
+      for (Product object: o) {
+          object.stopProduction();
+        }
+
+        for (Product object: a) {
+            object.stopProduction();
+          }
+
+          for (Product object: b) {
+              object.stopProduction();
+            }
       for (Client object: clientlist) {
           object.stopRecolte();
         }
+
+      }
 
 
     }
