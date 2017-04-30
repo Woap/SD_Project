@@ -58,7 +58,7 @@ implements Client {
 
     public synchronized int volOr(int value)
     throws RemoteException {
-        if (this.or != 100 && this.argent != 100 && this.bronze != 100) // Si je n'ai pas fini
+        if (this.or != 100 || this.argent != 100 || this.bronze != 100)
         {
             if (t.getTacheActuel() != Tache.OBSERVATION) // Si pendant le vol je suis en observation
             {
@@ -80,7 +80,7 @@ implements Client {
 
     public synchronized int volArgent(int value)
     throws RemoteException {
-        if (this.or != 100 && this.argent != 100 && this.bronze != 100) {
+        if (this.or != 100 || this.argent != 100 || this.bronze != 100) {
             if (t.getTacheActuel() != Tache.OBSERVATION) // Si pendant le vol je suis en observation
             {
 
@@ -100,7 +100,7 @@ implements Client {
 
     public synchronized int volBronze(int value)
     throws RemoteException {
-        if (this.or != 100 && this.argent != 100 && this.bronze != 100) {
+        if (this.or != 100 || this.argent != 100 || this.bronze != 100) {
             if ((t.getTacheActuel() != Tache.OBSERVATION)) // Si pendant le vol je suis en observation
             {
                 if (this.bronze >= value && value <= 10) {
@@ -108,14 +108,17 @@ implements Client {
                     this.bronze -= value;
                     return value;
                 } else
+                {
+                    System.out.println("Je me fait voler " + value + " bronze");
                     return 0;
+                }
 
             } else {
                 System.out.println("J'étais en observation pendant le vol, pénalité pour le voleur");
                 return -1; // Pénalité
             }
         } else
-            return 0;
+            return -2;
     }
 
     public synchronized int[] getAmountRess()

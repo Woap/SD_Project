@@ -12,5 +12,6 @@ public enum Personnalite {
     COOPERATIF,
     VOLEUR,
     PRUDENT,
+    HUMAIN,
     COOPERATIFMALIN;
 }

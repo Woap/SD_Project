@@ -35,8 +35,10 @@ implements Coordinateur {
     protected int nbclient = 0; // nombre de client
 
     protected int tourfini = 0;
+    protected int fini =0;
 
     private final Object lock = new Object();
+    private final Object lock2 = new Object();
     protected Coordinateur_thread t;
 
     protected int nbpor; // Nombre producteur d'or
@@ -90,11 +92,13 @@ implements Coordinateur {
 
             this.clientlist = new ArrayList < Client > ();
 
+
             Client client;
             for (int i = 1; i <= this.nbclient; i++) {
                 client = (Client) Naming.lookup("rmi://localhost:6666/Client" + i);
                 System.out.println("Client " + i + " " + client.getPersonnalite());
                 clientlist.add(client);
+
 
             }
         } catch (NotBoundException re) {
@@ -122,10 +126,17 @@ implements Coordinateur {
         }
 
         if (ordonnees == 1)
+        {
+            t.lancement();
             lancementJeuTourParTour();
+        }
+        else
+        {
+          t.lancement();
+          System.out.println("Lancement de la partie");
+        }
 
-        t.lancement();
-        System.out.println("Lancement de la partie");
+
 
     }
 
@@ -136,11 +147,14 @@ implements Coordinateur {
     */
     public void lancementJeuTourParTour()
     throws RemoteException {
-        while (true) {
+        while (fini == 0) {
+
             for (Client object: clientlist) {
                 tourfini = 0;
                 try {
+
                     object.tonTour();
+
                     while (tourfini == 0) {
 
                         Thread.sleep(100);
@@ -152,6 +166,7 @@ implements Coordinateur {
                     System.out.println(re);
                 }
             }
+
 
         }
     }
@@ -174,6 +189,10 @@ implements Coordinateur {
 
             classement++;
             tableauclassement.add(client);
+
+
+
+
 
             if (tableauclassement.size() == this.nbclient) {
 
@@ -199,6 +218,7 @@ implements Coordinateur {
                     System.out.println(i + 1 + ". Client" + tableauclassement.get(i));
 
                 }
+                this.fini = 1;
 
             }
 
@@ -210,6 +230,11 @@ implements Coordinateur {
                 }
                 System.out.println("Le client " + client + "(" + this.clientlist.get(client - 1).getPersonnalite() + ") " + " gagne la partie");
                 System.out.println("Durée de la partie : " + t.getTime() + "ms");
+                for (Client object: clientlist) {
+                    object.stopRecolte();
+                    object.tonTour();
+                }
+
                 for (Product object: o) {
                     object.stopProduction();
                 }
@@ -221,9 +246,8 @@ implements Coordinateur {
                 for (Product object: b) {
                     object.stopProduction();
                 }
-                for (Client object: clientlist) {
-                    object.stopRecolte();
-                }
+
+                this.fini = 1;
             }
         }
     }

@@ -94,8 +94,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ordo->setGeometry(400,27,250,40);
     this->humain = new QCheckBox("Humain vs ordinateur inactif",this);
     humain->setGeometry(400,57,250,40);
-    humain->setCheckable(false);
-    humain->setStyleSheet("color : grey;");
+
+
     this->epuisable = new QCheckBox("Ressource illimité",this);
     epuisable->setGeometry(400,87,250,40);
     this->observation = new QCheckBox("Observation inactif",this);
@@ -189,7 +189,10 @@ void MainWindow::on_pushButton_clicked()
     if ( !humain->isChecked())
         humainn = 0;
     else
+    {
+        ordoo = 1;
         humainn = 1;
+    }
 
     if ( !epuisable->isChecked())
         epuii = 0;

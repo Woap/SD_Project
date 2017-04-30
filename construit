@@ -94,6 +94,13 @@ do
   xterm -hold -e java Clienttype localhost 6666 $no COOPERATIFMALIN $tot ${12} ${13} ${6} ${7} ${8} &
 done
 
+if [ ${10} = 1 ]
+then
+  let "no=$1 + $2 + $3 + $4 + $5 + 1"
+  let "tot=$1 + $2 + $3 + $4 + $5 + 1"
+  xterm -hold -e java Clienttype localhost 6666 $no HUMAIN $tot ${12} ${13} ${6} ${7} ${8} &
+fi
+
 cd ..
 
 
