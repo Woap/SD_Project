@@ -26,9 +26,11 @@ public class Coordinateurtype
 
     try
     {
-      CoordinateurImpl objLocal = new CoordinateurImpl (Integer.parseInt(args[1]),Integer.parseInt(args[2]),Integer.parseInt(args[3]),Integer.parseInt(args[4]),Integer.parseInt(args[5]),Integer.parseInt(args[6]),Integer.parseInt(args[7])) ;
+      Coordinateur_thread t = new Coordinateur_thread();
+      CoordinateurImpl objLocal = new CoordinateurImpl (Integer.parseInt(args[1]),Integer.parseInt(args[2]),Integer.parseInt(args[3]),Integer.parseInt(args[4]),Integer.parseInt(args[5]),Integer.parseInt(args[6]),Integer.parseInt(args[7]),t) ;
       Naming.rebind( "rmi://localhost:6666/Coordinateur" ,objLocal) ;
       objLocal.lancement(); // Lancement de la partie
+
     }
     catch (RemoteException re) { System.out.println(re) ; }
     catch (MalformedURLException e) { System.out.println(e) ; }

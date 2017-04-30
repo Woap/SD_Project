@@ -31,6 +31,7 @@ public class CoordinateurImpl
   protected int tourfini=0;
 
   private final Object lock = new Object();
+  protected Coordinateur_thread t;
 
   protected int nbpor;
 	protected int nbpargent;
@@ -38,7 +39,7 @@ public class CoordinateurImpl
 
 
 
-  public CoordinateurImpl (int nbclient,int ordonnees,int humain, int fin,int por,int pargent,int pbronze)
+  public CoordinateurImpl (int nbclient,int ordonnees,int humain, int fin,int por,int pargent,int pbronze, Coordinateur_thread t)
     throws RemoteException
   {
     super();
@@ -49,6 +50,7 @@ public class CoordinateurImpl
     this.nbpor = por;
     this.nbpargent= pargent;
     this.nbpbronze= pbronze;
+    this.t = t;
     this.tableauclassement = new ArrayList<Integer>();
     System.out.println("Coordinateur prêt ");
     } ;
@@ -116,6 +118,7 @@ public class CoordinateurImpl
     if ( ordonnees == 1)
       lancementJeuTourParTour();
 
+    t.lancement();
     System.out.println("Lancement de la partie");
 
   }
@@ -155,18 +158,15 @@ public class CoordinateurImpl
 
      if ( fin == 0 )
      {
-       try {
-       FileWriter writer = new FileWriter("../Logs/resultat", true);
-       writer.flush();
+
 	   System.out.println("Le client "+ client + "(" + this.clientlist.get(client-1).getPersonnalite() + ") " + " termine à la position "+ classement  );
-     writer.append("" + this.clientlist.get(client-1).getPersonnalite() +" " + classement+ "\n"  );
-     writer.close();
-     } catch (IOException e) { System.out.println(e) ; }
+     
      classement++;
      tableauclassement.add(client);
 
      if ( tableauclassement.size() == this.nbclient )
      {
+
 
        for (Product object: o) {
            object.stopProduction();
@@ -181,6 +181,7 @@ public class CoordinateurImpl
              }
 
        System.out.println("Fin de la partie");
+       System.out.println("Durée de la partie : " + t.getTime() +"ms");
        System.out.println("Voici le classement");
 
 
@@ -203,6 +204,7 @@ public class CoordinateurImpl
         }
 
       System.out.println("Le client "+ client + "(" + this.clientlist.get(client-1).getPersonnalite() + ") " + " gagne la partie");
+      System.out.println("Durée de la partie : " + t.getTime()+"ms");
       for (Product object: o) {
           object.stopProduction();
         }

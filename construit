@@ -22,7 +22,7 @@ mkdir tClient
 for i in Client Clienttype ClientImpl Client_log_thread ProductImpl Product_thread Product Client_thread Personnalite Coordinateur Coordinateurtype CoordinateurImpl Tache
 do  cp $i.class tClient ; done
 
-for i in Coordinateur Coordinateurtype CoordinateurImpl Client Clienttype ClientImpl ProductImpl Product_thread Product Client_thread Personnalite Tache
+for i in Coordinateur Coordinateurtype CoordinateurImpl Client Clienttype ClientImpl ProductImpl Product_thread Product Client_thread Personnalite Tache Coordinateur_thread
 do  cp $i.class tCoordinateur ; done
 
 for i in Productor ProductImpl Product Product_thread Product_log_thread
