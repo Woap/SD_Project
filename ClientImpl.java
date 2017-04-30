@@ -118,7 +118,7 @@ implements Client {
                 return -1; // Pénalité
             }
         } else
-            return -2;
+            return 0;
     }
 
     public synchronized int[] getAmountRess()
