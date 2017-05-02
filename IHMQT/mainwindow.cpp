@@ -6,6 +6,20 @@
 #include <QSignalMapper>
 #include <QDebug>
 #include <QProcess>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <sstream>
+
+namespace patch
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -220,7 +234,7 @@ void MainWindow::on_pushButton_clicked()
 
 
 
-    std::string arguments= "./construit " + std::to_string(indi->value()) + " " + std::to_string(coop->value()) + " " + std::to_string(voleur->value()) + " " + std::to_string(prudent->value()) + " " + std::to_string(coopprudent->value()) + " "+ std::to_string(productor->value()) + " " + std::to_string(productargent->value()) + " " + std::to_string(productbronze->value()) + " " + std::to_string(ordoo) + " " + std::to_string(humainn) + " " + std::to_string(epuii) + " "  + std::to_string(obss) + " " + std::to_string(voll) + " " + std::to_string(finn)   ;
+    std::string arguments= "./construit " + patch::to_string(indi->value()) + " " + patch::to_string(coop->value()) + " " + patch::to_string(voleur->value()) + " " + patch::to_string(prudent->value()) + " " + patch::to_string(coopprudent->value()) + " "+ patch::to_string(productor->value()) + " " + patch::to_string(productargent->value()) + " " + patch::to_string(productbronze->value()) + " " + patch::to_string(ordoo) + " " + patch::to_string(humainn) + " " + patch::to_string(epuii) + " "  + patch::to_string(obss) + " " + patch::to_string(voll) + " " + patch::to_string(finn)   ;
     const char *cstr = arguments.c_str();
     QProcess *proc2 = new QProcess();
     proc2->start("sh", QStringList() << "-c" << cstr  );
